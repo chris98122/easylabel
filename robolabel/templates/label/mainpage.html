@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <p> </p>
+{% endblock %}
+
+{% block content %}
+
+<ul>
+    {% for file in files %}
+    <li><img src="{{ file }}"/>{{ file }}</li>
+    {% endfor %}
+</ul>
+<div>
+<!--img src="static/images/00000.bmp"-->
+
+</div>
+
+</article>
+  <form method="post">
+    <label for="title">Title</label>
+    <input name="title" id="title" value="{{ request.form['title'] }}" required>
+    <input type="submit" value="Save">
+  </form>
+ 
+
+{% endblock %}
+
