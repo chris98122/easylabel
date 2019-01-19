@@ -25,8 +25,6 @@ from flask import send_from_directory
 @lb.route('/<int:id>/mainpage', methods=('GET', 'POST'))
 @login_required
 def mainpage(id):
-    
-
     root_dir = os.path.abspath(os.path.dirname(__file__))
     img_path=root_dir+'\static'+'\images'
     files = os.listdir(img_path)
@@ -35,14 +33,10 @@ def mainpage(id):
         id=-1
         file= "/static/images/"+files[id]
         return render_template('label/mainpage.html',file=file,id=id)
-
-    elif id<0:
-        id=len(files)-1
-        file= "/static/images/"+files[id]
-        return render_template('label/mainpage.html',file=file,id=id)
     else:
         file= "/static/images/"+files[id]
         
+        #有个Bug 标注id和图片名字没有同步排序（虽然好像没必要）
     if request.method == 'POST':
         title = request.form['title']
         body = files[id]
@@ -62,6 +56,7 @@ def mainpage(id):
             )
             db.commit()
             
-            return render_template('label/mainpage.html',file=file,id=id+1)
+            return render_template('label/mainpage.html',file=file,id=id)
+
 
     return render_template('label/mainpage.html',file=file,id=id)
