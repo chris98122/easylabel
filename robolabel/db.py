@@ -26,23 +26,7 @@ def close_db(e=None):
     if db is not None:
         db.close()
 
-def store_db():        
-    db = get_db()
-    
-    img_path=os.path.abspath('.\\static\\images')
-   
-    files=os.listdir(img_path) 
-    count=0
-    for filename in files:
-        count= count + 1
-        db = get_db()
-        db.execute(
-                'INSERT INTO pic (id,body)'
-                ' VALUES (?, ?)',
-                (count,filename)
-        ) 
-        db.commit()
-       
+
 
 
 def init_db():
@@ -57,7 +41,6 @@ def init_db():
 def init_db_command():
     """Clear the existing data and create new tables."""
     init_db()
-    store_db()
     click.echo('Initialized the database.')
     
 

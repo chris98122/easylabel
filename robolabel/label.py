@@ -26,9 +26,26 @@ from flask import send_from_directory
 @login_required
 def mainpage(id):
     
+
+    root_dir = os.path.abspath(os.path.dirname(__file__))
+    img_path=root_dir+'\static'+'\images'
+    files = os.listdir(img_path)
+  
+    if id>=len(files):
+        id=-1
+        file= "/static/images/"+files[id]
+        return render_template('label/mainpage.html',file=file,id=id)
+
+    elif id<0:
+        id=len(files)-1
+        file= "/static/images/"+files[id]
+        return render_template('label/mainpage.html',file=file,id=id)
+    else:
+        file= "/static/images/"+files[id]
+        
     if request.method == 'POST':
         title = request.form['title']
-        body = request.form['body']
+        body = files[id]
         error = None
 
         if not title:
@@ -44,17 +61,7 @@ def mainpage(id):
                 (title, body, g.user['id'])
             )
             db.commit()
-            return redirect(url_for('label.index'))
+            
+            return render_template('label/mainpage.html',file=file,id=id+1)
 
-    root_dir = os.path.abspath(os.path.dirname(__file__))
-    img_path=root_dir+'\static'+'\images'
-    files = os.listdir(img_path)
-  
-    if id>=len(files):
-        id=-1
-        file= "/static/images/"+files[id]
-        return render_template('label/mainpage.html',file=file,id=id)
-    else:
-        file= "/static/images/"+files[id]
-    
     return render_template('label/mainpage.html',file=file,id=id)
