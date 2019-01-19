@@ -1,9 +1,5 @@
 {% extends 'base.html' %}
 
-{% block header %}
-    <p> </p>
-{% endblock %}
-
 {% block content %}
 
 <ul>
@@ -14,20 +10,20 @@
 
 </article>
   <form method="post">
-    <label for="title">Title</label>
+    {% if post['title'] %}
+    <label for="title">Category： {{ post['title'] }}</label>
+    {% endif %}
     <input name="title" id="title" value="{{ request.form['title'] }}" required>
     <input type="submit" value="Save">
   </form>
-  {% if post['title'] %}
-    <p class="body"></p>category: {{ post['title'] }}</p>
 
     <a class="action" href="{{ url_for('label.mainpage', id=id+1) }}">下一张图片</a>
-  {% endif %}
+
   {% if id != 0%}
   <a class="action" href="{{ url_for('label.mainpage', id=id-1) }}">上一张图片</a>
  
   {% endif %}
-
+  <a class="action" href="{{ url_for('label.index') }}">go to index</a>
 {% endblock %}
 
 {% block scripts %}
