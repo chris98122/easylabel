@@ -21,33 +21,53 @@ def index():
     return render_template('label/index.html', posts=posts)
 
 
+def get_post(id, check_author=True):
+    
+    post = get_db().execute(
+        'SELECT p.id, title, body, created, author_id, username'
+        ' FROM post p JOIN user u ON p.author_id = u.id'
+        ' WHERE p.id = ?',
+        (id,)
+    ).fetchone()
+
+    if post is None:
+       print("post",id," is none")
+       
+    return post
+
 from flask import send_from_directory
 @lb.route('/<int:id>/mainpage', methods=('GET', 'POST'))
 @login_required
 def mainpage(id):
     root_dir = os.path.abspath(os.path.dirname(__file__))
     img_path=root_dir+'\static'+'\images'
+    post = get_post(id+1) 
     files = os.listdir(img_path)
-  
-    if id>=len(files):
-        id=-1
+     #####显示图片
+     ##显示方式： n-1到n页（显示为第0张）往后是第1张
+    if id==len(files):
+        id=0
         file= "/static/images/"+files[id]
-        return render_template('label/mainpage.html',file=file,id=id)
+        post = get_post(id+1) 
+        
     else:
         file= "/static/images/"+files[id]
-        
-        #有个Bug 标注id和图片名字没有同步排序（虽然好像没必要）
+
+    #####   显示图片 结束
+    ##### 上传分类的表单    
     if request.method == 'POST':
         title = request.form['title']
         body = files[id]
         error = None
-
+        
         if not title:
             error = 'Title is required.'
 
         if error is not None: 
             flash(error)
-        else:
+
+        ##### 如果db里面没有post 则insert    
+        elif post is None:
             db = get_db()
             db.execute(
                 'INSERT INTO post (title, body, author_id)'
@@ -55,8 +75,21 @@ def mainpage(id):
                 (title, body, g.user['id'])
             )
             db.commit()
-            
-            return render_template('label/mainpage.html',file=file,id=id)
+            post = get_post(id+1) 
+        ##### 如果db里面有post 则update    
+        elif post is not None:
+            db = get_db()
+            db.execute(
+                'UPDATE post SET title = ?, body = ? WHERE id = ?',
+                (title, body, id+1)
+            )
+            db.commit()
+            post = get_post(id+1) 
+            return render_template('label/mainpage.html',file=file,id=id,post=post)
 
-
-    return render_template('label/mainpage.html',file=file,id=id)
+    if post is not None:
+        print(post['id'])
+        print(post['title'])
+        print(post['body'])
+   
+    return render_template('label/mainpage.html',file=file,id=id,post=post)
