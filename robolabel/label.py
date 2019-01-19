@@ -21,7 +21,6 @@ def index():
     return render_template('label/index.html', posts=posts)
 
 
-
 from flask import send_from_directory
 @lb.route('/<int:id>/mainpage', methods=('GET', 'POST'))
 @login_required
@@ -50,5 +49,12 @@ def mainpage(id):
     root_dir = os.path.abspath(os.path.dirname(__file__))
     img_path=root_dir+'\static'+'\images'
     files = os.listdir(img_path)
-    file= "/static/images/"+files[id]
-    return render_template('label/mainpage.html',file=file)
+  
+    if id>=len(files):
+        id=-1
+        file= "/static/images/"+files[id]
+        return render_template('label/mainpage.html',file=file,id=id)
+    else:
+        file= "/static/images/"+files[id]
+    
+    return render_template('label/mainpage.html',file=file,id=id)

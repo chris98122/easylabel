@@ -19,13 +19,15 @@
     <input type="submit" value="Save">
   </form>
 
+  <a class="action" href="{{ url_for('label.mainpage', id=id+1) }}">下一张图片</a>
+
+
 {% endblock %}
 
 {% block scripts %}
 {{ super() }}
 
 
-  <button type="button" onclick="myFunction()">下一张图片</button>
 <script type="application/javascript" >
   function myFunction(){
    
