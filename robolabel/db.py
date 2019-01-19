@@ -29,11 +29,9 @@ def close_db(e=None):
 def store_db():        
     db = get_db()
     
-    UPLOAD_FOLDER = 'C:/Users/roborock/Documents/GitHub/easylabel/robolabel/static/images'
-    #ALLOWED_EXTENSIONS = set(['.bmp'])
-    app = Flask(__name__)
-    app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-    files=os.listdir(UPLOAD_FOLDER) 
+    img_path=os.path.abspath('.\\static\\images')
+   
+    files=os.listdir(img_path) 
     count=0
     for filename in files:
         count= count + 1
@@ -67,4 +65,3 @@ def init_db_command():
 def init_app(app):
     app.teardown_appcontext(close_db)
     app.cli.add_command(init_db_command)
-    

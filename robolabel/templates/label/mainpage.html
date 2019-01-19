@@ -7,13 +7,9 @@
 {% block content %}
 
 <ul>
-    {% for file in files %}
-    <li><img src="{{ file }}"/>{{ file }}</li>
-    {% endfor %}
-</ul>
+    <img src="{{ file }}"/>
+    
 <div>
-<!--img src="static/images/00000.bmp"-->
-
 </div>
 
 </article>
@@ -22,7 +18,17 @@
     <input name="title" id="title" value="{{ request.form['title'] }}" required>
     <input type="submit" value="Save">
   </form>
- 
 
 {% endblock %}
 
+{% block scripts %}
+{{ super() }}
+
+
+  <button type="button" onclick="myFunction()">下一张图片</button>
+<script type="application/javascript" >
+  function myFunction(){
+   
+  }
+</script>
+ {% endblock %}

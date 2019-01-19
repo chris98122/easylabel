@@ -22,9 +22,10 @@ def index():
 
 
 
-@lb.route('/mainpage', methods=('GET', 'POST'))
+from flask import send_from_directory
+@lb.route('/<int:id>/mainpage', methods=('GET', 'POST'))
 @login_required
-def mainpage():
+def mainpage(id):
     
     if request.method == 'POST':
         title = request.form['title']
@@ -34,7 +35,7 @@ def mainpage():
         if not title:
             error = 'Title is required.'
 
-        if error is not None:
+        if error is not None: 
             flash(error)
         else:
             db = get_db()
@@ -45,27 +46,9 @@ def mainpage():
             )
             db.commit()
             return redirect(url_for('label.index'))
-    
-    return render_template('label/mainpage.html')
 
-@lb.route('/<int:id>')
-def dir_listing(id):
-    BASE_DIR = '/Users/roborock/Documents/GitHub/easylabel/robolabel/static/images/'
-
-    # Joining the base and the requested path
-    
-    print(id)
-    # Return 404 if path doesn't exist
-    if not os.path.exists(BASE_DIR):
-        return abort(404)
-
-    # Check if path is a file and serve
-    if os.path.isfile(BASE_DIR):
-        return send_file(BASE_DIR)
-
-    # Show directory contents
-    files = os.listdir(BASE_DIR)
-    return render_template('label/mainpage.html', files=files)
-
-@lb.route('/<string:pic>')
-       return send_file
+    root_dir = os.path.abspath(os.path.dirname(__file__))
+    img_path=root_dir+'\static'+'\images'
+    files = os.listdir(img_path)
+    file= "/static/images/"+files[id]
+    return render_template('label/mainpage.html',file=file)
