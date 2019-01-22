@@ -39,6 +39,7 @@ def get_post(id, check_author=True):
 @lb.route('/<int:id>/mainpage', methods=('GET', 'POST'))
 @login_required
 def mainpage(id):
+    print(request.headers)
     root_dir = os.path.abspath(os.path.dirname(__file__))
     img_path=root_dir+'\static'+'\images'
     post = get_post(id+1) 
@@ -54,9 +55,15 @@ def mainpage(id):
         file= "/static/images/"+files[id]
 
     #####   显示图片 结束
-    ##### 上传分类的表单    
+    ##### 上传分类的表单   
+    if request.method == 'GET':
+        if post is not None:
+            print("get", post['title'])
     if request.method == 'POST':
+        
         title = request.form['title']
+        
+        print(title)
         body = files[id]
         error = None
         
@@ -75,18 +82,23 @@ def mainpage(id):
                 (title, body, g.user['id'])
             )
             db.commit()
+            id=id+1
+            file="/static/images/"+files[id]
             post = get_post(id+1) 
+            return render_template('label/mainpage.html',file=file,id=id,post=post)
         ##### 如果db里面有post 则update    
         elif post is not None:
             db = get_db()
+            print(id+1)
             db.execute(
                 'UPDATE post SET title = ?, body = ? WHERE id = ?',
                 (title, body, id+1)
             )
             db.commit()
+            id=id+1
+            file="/static/images/"+files[id]
             post = get_post(id+1) 
             return render_template('label/mainpage.html',file=file,id=id,post=post)
-   
     return render_template('label/mainpage.html',file=file,id=id,post=post)
 
 

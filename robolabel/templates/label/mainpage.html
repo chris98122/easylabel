@@ -1,38 +1,53 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
+<script src="/static/jquery-3.2.1.js" type="text/javascript"></script>	
+<script src="/static/jquery.selectareas.js" type="text/javascript"></script>
 <ul>
-    <img src="{{ file }}"/>
+    <img  class="img-responsive"src="{{ file }}"/>
     
 <div>
 </div>
 
 </article>
-  <form method="post">
     {% if post['title'] %}
-    <label for="title">Category： {{ post['title'] }}</label>
+    <label id="display" for="title">Category： {{ post['title'] }}</label>
     {% endif %}
-    <input name="title" id="title" value="{{ request.form['title'] }}" required>
+    <form method="post">
+    <input name="title" id="title" value="" required>
     <input type="submit" value="Save">
   </form>
-
+  <input type="button" id="livingroom" value="living room" class="actionOn" />
+  {% if post['title'] %}
     <a class="action" href="{{ url_for('label.mainpage', id=id+1) }}">下一张图片</a>
-
+    {% endif %}
   {% if id != 0%}
   <a class="action" href="{{ url_for('label.mainpage', id=id-1) }}">上一张图片</a>
  
   {% endif %}
   <a class="action" href="{{ url_for('label.index') }}">go to index</a>
+
+ 
 {% endblock %}
+
 
 {% block scripts %}
 {{ super() }}
 
 
 <script type="application/javascript" >
-  function myFunction(){
+   $(document).ready(function () {
+    $('#livingroom').click(function () {
+      $.post("{{ url_for('label.mainpage',id=id) }}",
+      {
+       title:"living room"
+      },
+      function(data,status){
+     
+      });
+       
+        });
    
-  }
+  });
 </script>
  {% endblock %}
