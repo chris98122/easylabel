@@ -3,8 +3,11 @@
 {% block header %}
   <h1>{% block title %}label{% endblock %}</h1>
   {% if g.user %}
-  <a class="action" href="{{ url_for('label.mainpage',id=0) }}">go to classify</a>
-  <a class="action" href="{{ url_for('label.annotation',id=0) }}">go to draw bounding box</a>
+  <ul class="breadcrumb">
+      <li><a href="{{ url_for('label.mainpage',id=0) }}">go to classify</a></li>
+      <li><a  href="{{ url_for('label.annotation',id=0) }}">go to draw bounding box</a></li>
+      
+  </ul>
   {% endif %}
 
 {% endblock %}
