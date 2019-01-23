@@ -115,6 +115,20 @@ def annotation(id):
     else:
         file= "/static/images/"+files[id]
 
+    if request.method == 'POST':
+        title = request.form['title']
+        x=request.form['x']
+        body = files[id]
+        error = None
+        
+        if not title:
+            error = 'tag is required.'
 
+        if error is not None: 
+            flash(error)
+        print("x:",x)
+        print("title:",title)
+        
+    
     return render_template('label/annotation.html',file=file,id=id)
 
