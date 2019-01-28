@@ -8,6 +8,10 @@ from robolabel.db import get_db
 from flask import current_app
 from flask import make_response
 import os
+import json
+from flask import jsonify
+from flask import Response
+
 lb = Blueprint('label', __name__)
 
 @lb.route('/')
@@ -34,12 +38,28 @@ def get_post(id, check_author=True):
        print("post",id," is none")
        
     return post
+@lb.route('/getNewImage', methods=('GET', 'POST'))
+
+def getNewImage():
+    root_dir = os.path.abspath(os.path.dirname(__file__))
+    img_path=root_dir+'\static'+'\images'
+    #post = get_post(id+1) 
+    files = os.listdir(img_path)
+    
+    former_id =request.form.get('id')
+    former_id=int(former_id)
+    former_id+=1
+    print(former_id)
+    file= "/static/images/"+files[former_id]
+    print(file)
+    return jsonify(url=file)
+
+
 
 #from flask import send_from_directory
 @lb.route('/<int:id>/mainpage', methods=('GET', 'POST'))
 @login_required
 def mainpage(id):
-   
     root_dir = os.path.abspath(os.path.dirname(__file__))
     img_path=root_dir+'\static'+'\images'
     post = get_post(id+1) 
@@ -96,7 +116,9 @@ def mainpage(id):
                 return redirect( url_for('label.mainpage', id=0) )
             else:
                 return redirect( url_for('label.mainpage', id=id+1) )
+        
     return render_template('label/mainpage.html',file=file,id=id,post=post)
+    
 
 
 @lb.route('/<int:id>/annotation', methods=('GET', 'POST'))

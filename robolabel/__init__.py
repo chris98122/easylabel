@@ -10,6 +10,7 @@ def create_app(test_config=None):
         SECRET_KEY='dev',
         DATABASE=os.path.join(app.instance_path, 'robolabel.sqlite'),
     )
+    app.config.update(DEBUG=True,threaded=True)
 
     
 

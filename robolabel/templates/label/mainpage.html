@@ -8,6 +8,7 @@
    
     <form class="form-inline" role="form" method="post">
       <div class="form-group">
+          <label id="img_id">0</label>
           {% if post['title'] %}
           <label for="title">Category： {{ post['title'] }}</label>
           {% endif %}
@@ -15,7 +16,7 @@
        <button type="submit" class="btn btn-default">提交</button>
   
 </form>
-
+    <button type="button" id="testbutton"  class="btn btn-primary">test</button>
     <button type="button" id="livingroom"  class="btn btn-primary">living room</button>
     <button type="button" id="bedroom" class="btn btn-primary">bedroom</button>
     <button type="button" id="kitchen"class="btn btn-primary">kitchen</button>
@@ -30,7 +31,8 @@
  
   {% endif %}
   <button type="button" id="goindex"  class="btn btn-primary">go to index</button>
- 
+  <img  id =test  src=""/>
+   
 {% endblock %}
 
 
@@ -40,6 +42,8 @@
 
 <script type="application/javascript" >
    $(document).ready(function () {
+     var id=  new Number($('#img_id').html().trim());
+     
     $('#livingroom').click(function () {
       $.post("{{ url_for('label.mainpage',id=id) }}",
       {
@@ -77,6 +81,7 @@
       });
       window.location.href = "{{ url_for('label.mainpage', id=id+1) }}";
     });
+
     $('#others').click(function () {
       $.post("{{ url_for('label.mainpage',id=id) }}",
       {
@@ -98,6 +103,32 @@
       
       window.location.href ="{{ url_for('label.index') }}";
     });
+    $('#testbutton').click(function () {
+      id=Number($('#img_id').html().trim());
+      alert(id);
+      loadImage(id);
+      id+=1;
+      $("#img_id").html(id);
+    });
   });
+
+  function loadImage(id)
+  {
+	  console.log("INFO: " + "loadImage() from py"); 
+    console.log(id);
+	  $.ajax({
+			type: 'POST',
+			url: "{{ url_for('label.getNewImage') }}",
+      data:{'id': id},
+      cache:false, 
+			dataType: "json",
+			success: function(data)
+					 {    var dataObj=eval("("+data+")");
+						$('#test').attr("src",dataObj.url);
+						 },
+			dataType: 'html'
+		});
+	}
+
 </script>
  {% endblock %}
