@@ -1,11 +1,17 @@
 {% extends 'base.html' %}
 
+
+{% block scripts %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='bootstrap.css') }}">
+<link  media="screen" rel="stylesheet" type="text/css" href="{{ url_for('static', filename='jquery.selectareas.css')}} ">
+{% endblock %}
 {% block header %}
   <h1>{% block title %}label{% endblock %}</h1>
   {% if g.user %}
   <ul class="breadcrumb">
-      <li><a href="{{ url_for('label.mainpage',id=0) }}">go to classify</a></li>
-      <li><a  href="{{ url_for('label.annotation',id=0) }}">go to draw bounding box</a></li>
+      <li><a href="{{ url_for('label.mainpage') }}">go to classify</a></li>
+      <li><a  href="{{ url_for('label.annotation') }}">go to draw bounding box</a></li>
       
   </ul>
   {% endif %}
