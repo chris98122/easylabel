@@ -750,7 +750,7 @@ function isTagInAuthorizedList()
 
 	  $.ajax({
 			type: 'POST',
-			url: "{{ url_for('label.annotation') }}",
+			url: "{{ url_for('label.loadimage') }}",
 			data: {user_id: dataString},
 			dataType: "json",
 			success: function(data)

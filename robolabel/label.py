@@ -122,11 +122,9 @@ def mainpage():
     return render_template('label/mainpage.html',file=file,post=post)
     
 
-
-@lb.route('/annotation', methods=('GET', 'POST'))
+@lb.route('/loadimage', methods=('GET', 'POST'))
 @login_required
-def annotation():
-    
+def loadimage():
     root_dir = os.path.abspath(os.path.dirname(__file__))
     img_path=root_dir+'\static'+'\images'
     files = os.listdir(img_path)
@@ -134,21 +132,36 @@ def annotation():
     id=int(id)
     if(id==len(files)):
         id=len(files)
-    
+
     file= "/static/images/"+files[id]
-    if request.method == 'POST':
-        id =0
-        id=int(id)
-        if(id==len(files)):
-            id=len(files)
     
-        file= "/static/images/"+files[id]
-        print(file)
-        folder=""
-        annotations=''
-        return jsonify(url=file,id=id,\
-        folder=folder,annotations=annotations)
+    folder=""
+    annotations={}
+    return jsonify(url=file,id=id,\
+    folder=folder,annotations=annotations)
+    
+
+@login_required
+def writexml():
+
+
+
+@lb.route('/annotation', methods=('GET', 'POST'))
+@login_required
+def annotation():
+    if request.method == 'POST':
+        data = json.loads(request.form.get('sendInfo'))
+        id=data["id"]
+        url=data["url"]
+        folder=data["folder"]
+        width=data["width"]
+        height=data["height"]
+        annotations=data["annotations"]
+        ##打印所有tag
+        print(' '.join( str(v) for v in annotations))
+        message = str(id) +".xml has been created."
+        return jsonify(message=message)
         
     
-    return render_template('label/annotation.html',file=file,id=id)
+    return render_template('label/annotation.html')
 
