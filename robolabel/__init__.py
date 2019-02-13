@@ -39,5 +39,7 @@ def create_app(test_config=None):
     app.register_blueprint(label.lb)
     app.add_url_rule('/', endpoint='index')
 
-
+    from . import writexml
+    app.register_blueprint(writexml.lb)
+    
     return app

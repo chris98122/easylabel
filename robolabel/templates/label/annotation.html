@@ -663,7 +663,8 @@ function isTagInAuthorizedList()
 	   {
 	       // Reload a page but with a message
 		   setStatusAndColor("Data has been sent.", GREEN_COLOR);
-		   loadImage(); // replace the image
+		   id=Number($('#img_id').html().trim());
+		   loadImage(id+1); // replace the image
 		   getOrCreateUserId(); // Count also points later on
 
 		   // Message to user
@@ -741,20 +742,21 @@ function isTagInAuthorizedList()
     // E.g. db18458e2782b2b77e36769c569e263a53885a9944dd0a861e5064eac16f1a
     return hex;
   }
-
-  function loadImage()
+  function loadImage(id)
   {
-		var user_id=1;
+	  var user_id=1;
 	  var dataString = JSON.stringify(user_id);
 	  console.log("INFO: " + "loadImage() from label.py");
 
 	  $.ajax({
 			type: 'POST',
 			url: "{{ url_for('label.loadimage') }}",
-			data: {user_id: dataString},
+			data: {user_id: dataString,'id': id},
 			dataType: "json",
 			success: function(data)
 					 {
+						img_id+=1;
+						$("#img_id").html(id);
 						var dataJson=eval("("+data+")");
 						image_info.url = dataJson.url;
 						image_info.id = dataJson.id;
@@ -881,7 +883,7 @@ function isTagInAuthorizedList()
 														  
 														  
 							  <div style="padding-top:96px;box-sizing: border-box;width:100%;text-align: right;">
-								  <button onclick="window.location.reload()" class="tooltip ae_button_level_2">Ignore & Get next image
+								  <button onclick="loadImage(img_id)" class="tooltip ae_button_level_2">Ignore & Get next image
 								  <span class="tooltiptext light_blue">Ignore this image and associated tags and go to the next image.</span>
 								  <span style="padding-left:4px;">
 								  <img src="/static/icons/ic_replay_black_48dp.png" style="vertical-align: bottom;" alt="" width="18" height="18"></span></button>
@@ -899,7 +901,7 @@ function isTagInAuthorizedList()
 							  </div>
   
 					  </td>
-  
+					  <label id="img_id">0</label>
 					  <td id="col4" style="background-color:#fff">&nbsp;</td>
 			  </tr>
   
@@ -912,7 +914,8 @@ function isTagInAuthorizedList()
 
 
 <script>
+	  var img_id=  new Number($('#img_id').html().trim());
 		getOrCreateUserId();
-		loadImage();
+		loadImage(img_id);
  </script>
 {% endblock %}

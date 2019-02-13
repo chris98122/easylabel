@@ -5,6 +5,7 @@ from werkzeug.exceptions import abort
 
 from robolabel.auth import login_required
 from robolabel.db import get_db
+
 from flask import current_app
 from flask import make_response
 import os
@@ -128,8 +129,7 @@ def loadimage():
     root_dir = os.path.abspath(os.path.dirname(__file__))
     img_path=root_dir+'\static'+'\images'
     files = os.listdir(img_path)
-    id =0
-    id=int(id)
+    id =int(request.form.get('id'))
     if(id==len(files)):
         id=len(files)
 
@@ -139,12 +139,9 @@ def loadimage():
     annotations={}
     return jsonify(url=file,id=id,\
     folder=folder,annotations=annotations)
-    
-
-@login_required
-def writexml():
 
 
+from robolabel.writexml import writexml
 
 @lb.route('/annotation', methods=('GET', 'POST'))
 @login_required
@@ -158,7 +155,9 @@ def annotation():
         height=data["height"]
         annotations=data["annotations"]
         ##打印所有tag
-        print(' '.join( str(v) for v in annotations))
+        #print(' '.join( str(v) for v in annotations))
+        file=url.split("/")
+        writexml(annotations,file[-1],width,height)
         message = str(id) +".xml has been created."
         return jsonify(message=message)
         
