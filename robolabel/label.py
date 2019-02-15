@@ -77,8 +77,17 @@ def mainpage():
     
     files = os.listdir(img_path)
     file= "/static/images/"+files[0]
-    ##### 上传分类的表单   
-    post = get_post(1) 
+    for i in range(len(files)):
+        post=get_post(i+1)
+        if post is None:
+            file= "/static/images/"+files[i]
+            print(file)
+            id=i
+            break
+        if post is not None and i == len(files)-1:
+            file= "/static/images/"+files[i]
+            id=i
+            
 
     if request.method == 'POST':
         id= request.form['id']
@@ -120,7 +129,8 @@ def mainpage():
             else:
                 return redirect( url_for('label.mainpage') )
         
-    return render_template('label/mainpage.html',file=file,post=post)
+    
+    return render_template('label/mainpage.html',file=file,post=post,id=id)
     
 
 @lb.route('/loadimage', methods=('GET', 'POST'))
@@ -160,7 +170,6 @@ def annotation():
         writexml(annotations,file[-1],width,height)
         message = str(id) +".xml has been created."
         return jsonify(message=message)
-        
-    
+      
     return render_template('label/annotation.html')
 

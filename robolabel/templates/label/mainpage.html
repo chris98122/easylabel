@@ -12,7 +12,7 @@
    
       <div class="form-inline" >
           <label >pic number:</label>
-          <label id="img_id">0</label>
+          <label id="img_id">{{ id }}</label>
           <label >Category：</label>
           <label id="category"for="title"> {{ post['title'] }}</label>
         
@@ -26,6 +26,19 @@
     <button type="button" id="kitchen"class="btn btn-primary">kitchen</button>
     <button type="button" id="restroom"class="btn btn-primary">restroom</button>
     <button type="button" id="others"class="btn btn-primary">others</button>
+    <button type="button" id="undefined"class="btn btn-primary">undefined</button>
+  </div>
+
+  <div>
+
+    <button type="button" id="livingroom-major"  class="btn btn-primary">living room-major</button>
+    <button type="button" id="bedroom-major"class="btn btn-primary">bedroom-major</button>
+    <button type="button" id="kitchen-major"class="btn btn-primary">kitchen-major</button>
+    <button type="button" id="restroom-major"class="btn btn-primary">restroom-major</button>
+    <button type="button" id="study"class="btn btn-primary">study</button>
+    <button type="button" id="kidsroom"class="btn btn-primary">kids' room</button>
+    <button type="button" id="balcony"class="btn btn-primary">balcony</button>
+    <button type="button" id="corridor"class="btn btn-primary">corridor</button>
   </div>
   {% if post['title'] %}
   <button type="button" id="nextpic"  class="btn btn-primary">下一张图片</button>
@@ -45,7 +58,8 @@
 <script type="application/javascript" >
    $(document).ready(function () {
      var id=  new Number($('#img_id').html().trim());
-     var title=$("#title ").val()
+     var title=$("#title ").val();
+
      $('#submit').click(function () {
       id=Number($('#img_id').html().trim());
       title=$("#title ").val();
@@ -59,14 +73,72 @@
       loadImage(id+1);
       loadPost(id+1);
     });
-
-
-
+    $('#kidsroom').click(function () {
+      id=Number($('#img_id').html().trim());
+      $.post("{{ url_for('label.mainpage') }}",
+      {
+       title:"kid's room",
+       id:id
+      },
+      function(data,status){
+      });
+      loadImage(id+1);
+      loadPost(id+1);
+    });
+    
+    $('#corridor').click(function () {
+      id=Number($('#img_id').html().trim());
+      $.post("{{ url_for('label.mainpage') }}",
+      {
+       title:"corridor",
+       id:id
+      },
+      function(data,status){
+      });
+      loadImage(id+1);
+      loadPost(id+1);
+    });
+    $('#balcony').click(function () {
+      id=Number($('#img_id').html().trim());
+      $.post("{{ url_for('label.mainpage') }}",
+      {
+       title:"balcony",
+       id:id
+      },
+      function(data,status){
+      });
+      loadImage(id+1);
+      loadPost(id+1);
+    });
+    $('#study').click(function () {
+      id=Number($('#img_id').html().trim());
+      $.post("{{ url_for('label.mainpage') }}",
+      {
+       title:"study",
+       id:id
+      },
+      function(data,status){
+      });
+      loadImage(id+1);
+      loadPost(id+1);
+    });
     $('#livingroom').click(function () {
       id=Number($('#img_id').html().trim());
       $.post("{{ url_for('label.mainpage') }}",
       {
        title:"living room",
+       id:id
+      },
+      function(data,status){
+      });
+      loadImage(id+1);
+      loadPost(id+1);
+    });
+    $('#livingroom-major').click(function () {
+      id=Number($('#img_id').html().trim());
+      $.post("{{ url_for('label.mainpage') }}",
+      {
+       title:"living room-major",
        id:id
       },
       function(data,status){
@@ -86,12 +158,35 @@
       loadImage(id+1);
       loadPost(id+1);
     });
-    
+    $('#bedroom-major').click(function () {
+      id=Number($('#img_id').html().trim());
+      $.post("{{ url_for('label.mainpage') }}",
+      {
+       title:"bedroom-major",
+       id:id
+      },
+      function(data,status){
+      });
+      loadImage(id+1);
+      loadPost(id+1);
+    });
     $('#kitchen').click(function () {
       id=Number($('#img_id').html().trim());
       $.post("{{ url_for('label.mainpage') }}",
       {
        title:"kitchen",
+       id:id
+      },
+      function(data,status){
+      });
+      loadImage(id+1);
+      loadPost(id+1);
+    });
+    $('#kitchen-major').click(function () {
+      id=Number($('#img_id').html().trim());
+      $.post("{{ url_for('label.mainpage') }}",
+      {
+       title:"kitchen-major",
        id:id
       },
       function(data,status){
@@ -111,12 +206,37 @@
       loadImage(id+1);
       loadPost(id+1);
     });
+    
+    $('#restroom-major').click(function () {
+      id=Number($('#img_id').html().trim());
+      $.post("{{ url_for('label.mainpage') }}",
+      {
+       title:"restroom-major",
+       id:id
+      },
+      function(data,status){
+      });
+      loadImage(id+1);
+      loadPost(id+1);
+    });
 
     $('#others').click(function () {
       id=Number($('#img_id').html().trim());
       $.post("{{ url_for('label.mainpage') }}",
       {
        title:"others",
+       id:id
+      },
+      function(data,status){
+      });
+      loadImage(id+1);
+      loadPost(id+1);
+    });
+    $('#undefined').click(function () {
+      id=Number($('#img_id').html().trim());
+      $.post("{{ url_for('label.mainpage') }}",
+      {
+       title:"undefined",
        id:id
       },
       function(data,status){
@@ -181,7 +301,6 @@
 			dataType: 'html'
 		});
 	}
-
 
 </script>
  {% endblock %}
